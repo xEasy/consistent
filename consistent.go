@@ -23,6 +23,10 @@ func NewConsistent() *Hash {
 	return &Hash{}
 }
 
+func (c *Hash) IsEmpty() bool {
+	return c.nodes == nil || len(c.nodes) == 0
+}
+
 func (c *Hash) Add(node string, virtualNodeCount int) error {
 	if node == "" {
 		return nil
@@ -68,6 +72,10 @@ func (c *Hash) GetNode(key string) string {
 	c.RLock()
 	defer c.RUnlock()
 
+	if c.nodes == nil || len(c.nodes) == 0 {
+		return ""
+	}
+
 	hash := c.hashKey(key)
 	i := c.getPosition(hash)
 
@@ -81,6 +89,10 @@ func (c *Hash) Remove(node string) error {
 
 	c.Lock()
 	defer c.Unlock()
+
+	if c.nodes == nil || len(c.nodes) == 0 {
+		return nil
+	}
 
 	if _, ok := c.nodes[node]; !ok {
 		return errors.New("node not existed!")

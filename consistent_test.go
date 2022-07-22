@@ -6,6 +6,33 @@ import (
 	"testing"
 )
 
+func TestConsistenthashEmpty(t *testing.T) {
+	cs := NewConsistent()
+
+	node := cs.GetNode("1234")
+	fmt.Println("getnode with none nodes: ", node)
+	if node != "" {
+		t.Fail()
+	}
+
+	cs.Add("one", 100)
+	cs.Remove("one")
+	node = cs.GetNode("1234")
+	fmt.Println("getnode with empty nodes: ", node)
+	if node != "" {
+		t.Fail()
+	}
+
+	cs.Add("two", 50)
+	cs.Add("thr", 30)
+
+	node = cs.GetNode("1234")
+	fmt.Println("getnode with 2 nodes: ", node)
+	if node != "two" {
+		t.Fail()
+	}
+}
+
 func TestConsistent(t *testing.T) {
 	cs := NewConsistent()
 	cs.Add("one", 150)
